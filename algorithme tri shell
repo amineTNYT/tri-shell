@@ -1,0 +1,26 @@
+Procédure Tri_Shell (@ T:tab, N:entier)
+Début
+
+p<0
+Tant que (p<N) faire  
+  p< (3*p+1)   Calcul de pas maximal  
+Fin tant que
+
+Tant que (p≠0) faire  
+  p<p div 3  
+
+  Pour i de p à N-1 faire  
+    v←T[i]      TDOL  
+    j←i         Objet Type / Nature  
+                p,j,v entier  
+
+    Tant que (j>p-1) et (T[j-p]>v) faire  
+      T[j]←T[j-p]  
+      j←j-p  
+    Fin Tant que  
+
+    T[j]←v  
+  Fin pour  
+Fin Tant que  
+Fin
+
