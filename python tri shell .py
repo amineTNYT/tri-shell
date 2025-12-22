@@ -1,4 +1,4 @@
-
+from numpy import array
 def saisir():
     N = int(input("N = "))
     while not (1 <= N < 200):
@@ -7,7 +7,7 @@ def saisir():
     return N
 def remplir(t, n):
     for i in range(n):
-        t[i] = int(input(f"t[{i}] = "))
+        t[i] = int(input("t["+str(i)+"] = "))
 
 def tri_shell(T,N):
     N = len(T)
@@ -36,7 +36,8 @@ def affichage(t, n):
         print(t[i], end=" | ")
     print("\n")
 n=saisir()
-t=([int]*n)
+t=array([int]*n)
 remplir(t,n)
 tri_shell(t,n)
 affichage(t,n)
+
