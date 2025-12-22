@@ -29,8 +29,8 @@ def tri_shell(T,N):
             while j >= p and T[j - p] > v:
                 T[j] = T[j - p]
                 j -= p
-            
             T[j] = v
+            
 def affichage(t, n):
     for i in range(n):
         print(t[i], end=" | ")
@@ -40,5 +40,6 @@ t=array([int]*n)
 remplir(t,n)
 tri_shell(t,n)
 affichage(t,n)
+
 
 
