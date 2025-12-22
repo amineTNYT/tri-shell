@@ -1,15 +1,12 @@
-# Tri Shell (Shell Sort) - Ressources
+# Tri Shell - Ressources Éducatives Complètes
 
-Ce dépôt contient des exemples et des implémentations de l'algorithme de **Tri Shell** (Shell Sort), un algorithme de tri conçu pour améliorer les méthodes simples comme le Tri à Bulles.  
+Le Tri Shell (Shell Sort) est un algorithme de tri plus efficace que le tri à bulles pour de grandes listes. Il consiste à **comparer d'abord des éléments éloignés**, puis à réduire progressivement l'écart pour terminer avec un tri classique. Selon les cas, sa complexité peut atteindre **O(n²)**, mais il est généralement plus rapide que les tris simples.
 
-Le Tri Shell fonctionne en **comparant d'abord des éléments éloignés**, puis en réduisant progressivement l'écart entre les éléments pour améliorer l'efficacité. Il est plus rapide que les tris simples de complexité quadratique, mais peut parfois atteindre **O(n²)** selon les cas.
+## 📊 Ressources Complètes
 
-## Ressources
+### 📁 Fichiers disponibles
 
-1. **Explication de l'algorithme (en français)**  
-   [algorithme tri shell](https://github.com/amineTNYT/tri-shell/blob/main/algorithme%20tri%20shell)  
-   Ce fichier explique l'algorithme du Tri Shell étape par étape, montrant comment le tri est effectué.
+Pour étudier et maîtriser le Tri Shell, voici les fichiers essentiels :
 
-2. **Implémentation Python**  
-   [python tri shell.py](https://github.com/amineTNYT/tri-shell/blob/main/python%20tri%20shell%20.py)  
-   Ce script Python contient une implémentation prête à l'emploi du Tri Shell.
+- **[`algorithme tri shell`](https://github.com/amineTNYT/tri-shell/blob/main/algorithme%20tri%20shell)** → Algorithme détaillé et expliqué étape par étape  
+- **[`python tri shell.py`](https://github.com/amineTNYT/tri-shell/blob/main/python%20tri%20shell%20.py)** → Code Python complet et commenté prêt à exécuter
