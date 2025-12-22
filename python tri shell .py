@@ -13,7 +13,7 @@ def tri_shell(T,N):
     N = len(T)
     p = 0
     
-    # Calcul du pas maximal (séquence de Knuth)
+    # Calcul du pas maximal 
     while p < N:
         p = 3 * p + 1
     
@@ -40,4 +40,5 @@ t=array([int]*n)
 remplir(t,n)
 tri_shell(t,n)
 affichage(t,n)
+
 
