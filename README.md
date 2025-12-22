@@ -12,3 +12,4 @@ Pour étudier et maîtriser le Tri Shell, voici les fichiers essentiels :
 
 - **[`algorithme tri shell`](https://github.com/amineTNYT/tri-shell/blob/main/algorithme%20tri%20shell)** → Algorithme détaillé et expliqué étape par étape  
 - **[`python tri shell.py`](https://github.com/amineTNYT/tri-shell/blob/main/python%20tri%20shell%20.py)** → Code Python complet et commenté prêt à exécuter
+- **[`page html`](https://github.com/amineTNYT/tri-shell/blob/main/tri%20shell.html)** → page html pour comprendre mieux tri shell
