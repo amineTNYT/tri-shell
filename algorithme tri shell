@@ -8,12 +8,10 @@ Fin tant que
 
 Tant que (p≠0) faire  
   p<p div 3  
-
   Pour i de p à N-1 faire  
-    v←T[i]      TDOL  
-    j←i         Objet Type / Nature  
-                p,j,v entier  
-
+       v←T[i]                                                                                     
+       j←i
+                                                                                                                                                                     
     Tant que (j>p-1) et (T[j-p]>v) faire  
       T[j]←T[j-p]  
       j←j-p  
