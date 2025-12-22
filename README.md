@@ -1,6 +1,6 @@
 # Tri Shell - Ressources Éducatives Complètes
 
-**Pour les élèves de 4ᵉ année BAC Info**
+### Pour les élèves de 4ᵉ année BAC Info**
 
 Le Tri Shell (Shell Sort) est un algorithme de tri plus efficace que le tri à bulles pour de grandes listes. Il consiste à **comparer d'abord des éléments éloignés**, puis à réduire progressivement l'écart pour terminer avec un tri classique. Selon les cas, sa complexité peut atteindre **O(n²)**, mais il est généralement plus rapide que les tris simples.
 
