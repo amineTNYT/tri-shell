@@ -3,268 +3,167 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tri Shell - Animation</title>
+<title>Tri Shell</title>
 <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: sans-serif; background: #0f172a; color: #e2e8f0; padding: 20px; min-height: 100vh; }
-    .container { max-width: 1200px; margin: 0 auto; }
-    h1 { text-align: center; margin: 20px 0; color: #f1f5f9; }
-    
-    /* Panneau de contrôle */
-    .control-panel { background: #1e293b; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
-    .buttons { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
-    button { padding: 12px 24px; border: none; border-radius: 8px; color: white; cursor: pointer; }
-    #startBtn { background: #3b82f6; }
-    #generateBtn { background: #10b981; }
-    #speedBtn { background: #8b5cf6; }
-    button:disabled { background: #475569; cursor: not-allowed; }
-    
-    /* Affichage tableau */
-    .array-display { background: #1e293b; padding: 30px; border-radius: 10px; margin: 20px 0; }
-    .array-container { display: flex; gap: 10px; align-items: flex-end; justify-content: center; }
-    .array-element {
-        width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;
-        border-radius: 8px; font-weight: bold; color: white; transition: all 0.3s;
-    }
-    .default { background: #475569; }
-    .comparing { background: #f59e0b; transform: scale(1.1); }
-    .swapping { background: #ef4444; animation: pulse 1s infinite; }
-    .current-gap { background: #8b5cf6; }
-    .sorted { background: #10b981; }
-    @keyframes pulse { 
-        0%,100% { transform: scale(1.1); } 
-        50% { transform: scale(1.2); } 
-    }
-    
-    /* État et code */
-    #steps { background: #1e293b; padding: 20px; border-radius: 10px; margin: 20px 0; }
-    .status-info { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin: 20px 0; }
-    .info-item { background: #0f172a; padding: 15px; border-radius: 8px; text-align: center; }
-    .code-block { background: #0f172a; padding: 20px; border-radius: 10px; margin: 20px 0; }
-    pre { color: #e2e8f0; overflow-x: auto; }
-    
-    /* Watermark */
-    .watermark {
-        position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
-        background: #1e293b; color: white; padding: 12px 25px; border-radius: 8px;
-        text-align: center; border: 2px solid #10b981;
-    }
-    
-    @media (max-width: 768px) {
-        .array-element { width: 45px; height: 45px; }
-        button { padding: 10px 20px; font-size: 14px; }
-    }
+    body { font-family: Arial; background: #111; color: #fff; padding: 20px; }
+    .container { max-width: 800px; margin: 0 auto; }
+    h1 { text-align: center; margin: 20px 0; color: #0af; }
+    .controls { text-align: center; margin: 20px 0; }
+    button { padding: 10px 20px; margin: 0 5px; background: #0af; border: none; color: white; cursor: pointer; }
+    button:disabled { background: #555; cursor: not-allowed; }
+    .array { display: flex; justify-content: center; margin: 40px 0; height: 100px; }
+    .elem { width: 40px; height: 40px; background: #333; margin: 0 2px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    .comparing { background: #fa0; }
+    .swapping { background: #f00; }
+    .sorted { background: #0a0; }
+    .steps { background: #222; padding: 15px; margin: 20px 0; border-radius: 5px; min-height: 60px; }
+    .stats { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
 </style>
 </head>
 <body>
 <div class="container">
-    <h1>Tri Shell (Shell Sort)</h1>
+    <h1>Tri Shell</h1>
     
-    <!-- Contrôles -->
-    <div class="control-panel">
-        <div class="buttons">
-            <button id="startBtn">Démarrer</button>
-            <button id="generateBtn">Nouveau Tableau</button>
-            <button id="speedBtn">Vitesse: ×1</button>
-        </div>
+    <div class="controls">
+        <button id="startBtn">Démarrer</button>
+        <button id="randomBtn">Nouveau</button>
+        <button id="speedBtn">Vitesse: ×1</button>
     </div>
     
-    <!-- Tableau animé -->
-    <div class="array-display">
-        <div class="array-container" id="arrayContainer"></div>
+    <div class="stats">
+        <div>Pas: <span id="gap">-</span></div>
+        <div>Comparaisons: <span id="comp">0</span></div>
+        <div>Décalages: <span id="shift">0</span></div>
     </div>
     
-    <!-- Description étapes -->
-    <div id="steps">Prêt à commencer...</div>
+    <div class="array" id="array"></div>
     
-    <!-- Statistiques -->
-    <div class="status-info">
-        <div class="info-item"><div>Pas actuel</div><div id="currentGap">-</div></div>
-        <div class="info-item"><div>Comparaisons</div><div id="comparisons">0</div></div>
-        <div class="info-item"><div>Décalages</div><div id="shifts">0</div></div>
-    </div>
-    
-    <!-- Algorithme -->
-    <div class="code-block">
-        <h3>Algorithme du Tri Shell</h3>
-        <pre>procédure tri_shell(@T:tab; N:entier)
-Début
-    p ← 0
-    Tant que (p < N) faire
-        p ← 3 × p + 1
-    Fin Tant que
-    
-    Tant que (p ≠ 0) faire
-        p ← p div 3
-        Pour i de p à N-1 faire
-            v ← T[i]
-            j ← i
-            Tant que (j ≥ p) et (T[j-p] > v) faire
-                T[j] ← T[j-p]
-                j ← j - p
-            Fin Tant que
-            T[j] ← v
-        Fin Pour
-    Fin Tant que
-Fin</pre>
-    </div>
-</div>
-
-<div class="watermark">
-    Créé par Amine | GitHub: <a href="https://github.com/AmineTNYT" target="_blank" style="color:#10b981;">@AmineTNYT</a>
+    <div class="steps" id="steps">Prêt.</div>
 </div>
 
 <script>
-// Éléments DOM
-const arrayContainer = document.getElementById('arrayContainer');
+let arr = [35, 33, 42, 10, 14, 19, 27, 44, 26, 31];
+let running = false;
+let speed = 1;
+
 const startBtn = document.getElementById('startBtn');
-const generateBtn = document.getElementById('generateBtn');
+const randomBtn = document.getElementById('randomBtn');
 const speedBtn = document.getElementById('speedBtn');
-const stepsDiv = document.getElementById('steps');
-const currentGap = document.getElementById('currentGap');
-const comparisons = document.getElementById('comparisons');
-const shifts = document.getElementById('shifts');
+const steps = document.getElementById('steps');
+const gapEl = document.getElementById('gap');
+const compEl = document.getElementById('comp');
+const shiftEl = document.getElementById('shift');
+const arrayEl = document.getElementById('array');
 
-// Variables globales
-let arr = [];
-let isAnimating = false;
-let speedLevel = 1;
-let baseDelay = 1000;
-
-// Gestion vitesse
-speedBtn.onclick = () => {
-    if (speedLevel === 1) { speedLevel = 2; baseDelay = 500; speedBtn.textContent = "Vitesse: ×2"; }
-    else if (speedLevel === 2) { speedLevel = 4; baseDelay = 250; speedBtn.textContent = "Vitesse: ×4"; }
-    else { speedLevel = 1; baseDelay = 1000; speedBtn.textContent = "Vitesse: ×1"; }
-};
-
-// Fonction pause
-function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms / speedLevel)); }
-
-// Initialisation tableau
-function initializeArray() {
-    arr = [35, 33, 42, 10, 14, 19, 27, 44, 26, 31];
-    renderArray();
-    resetStats();
-    stepsDiv.textContent = "Cliquez sur 'Démarrer' pour lancer l'animation.";
-}
-
-// Génération aléatoire
-function generateRandomArray() {
-    arr = Array.from({length: 10}, () => Math.floor(Math.random() * 90) + 10);
-    renderArray();
-    resetStats();
-    stepsDiv.textContent = "Nouveau tableau généré. Cliquez sur 'Démarrer'.";
-}
-
-// Affichage tableau
-function renderArray() {
-    arrayContainer.innerHTML = '';
+function render() {
+    arrayEl.innerHTML = '';
     arr.forEach((val, i) => {
         const div = document.createElement('div');
-        div.className = 'array-element default';
-        div.id = `elem${i}`;
+        div.className = 'elem';
+        div.id = 'e' + i;
         div.textContent = val;
-        arrayContainer.appendChild(div);
+        arrayEl.appendChild(div);
     });
 }
 
-// Réinitialisation stats
-function resetStats() {
-    currentGap.textContent = '-';
-    comparisons.textContent = '0';
-    shifts.textContent = '0';
+function update(i, cls) {
+    const el = document.getElementById('e' + i);
+    if (el) el.className = 'elem ' + cls;
 }
 
-// Mise à jour élément
-function updateElement(index, className) {
-    const elem = document.getElementById(`elem${index}`);
-    elem.className = `array-element ${className}`;
+function sleep(ms) {
+    return new Promise(r => setTimeout(r, ms / speed));
 }
 
-// Tri Shell animé
-async function shellSortAnimation() {
-    if (isAnimating) return;
-    isAnimating = true;
+async function shellSort() {
+    if (running) return;
+    running = true;
     startBtn.disabled = true;
-    generateBtn.disabled = true;
     
     const n = arr.length;
-    let totalComparisons = 0;
-    let totalShifts = 0;
+    let comp = 0, shift = 0;
     
-    // Calcul séquence des pas (Knuth)
+    // Calcul gaps (Knuth)
     let gap = 1;
     while (gap < n) gap = gap * 3 + 1;
     gap = Math.floor(gap / 3);
     
     while (gap > 0) {
-        currentGap.textContent = gap;
-        stepsDiv.textContent = `Pas = ${gap} - Tri par insertion avec ce décalage`;
-        await sleep(2000);
+        gapEl.textContent = gap;
+        steps.textContent = `Pas = ${gap}`;
+        await sleep(500);
         
         for (let i = gap; i < n; i++) {
             const temp = arr[i];
             let j = i;
             
-            // Affichage comparaison
-            updateElement(i, 'comparing');
-            if (j - gap >= 0) updateElement(j - gap, 'comparing');
-            totalComparisons++;
-            comparisons.textContent = totalComparisons;
-            await sleep(1500);
+            update(i, 'comparing');
+            if (j - gap >= 0) update(j - gap, 'comparing');
+            comp++; compEl.textContent = comp;
+            await sleep(300);
             
-            // Décalage éléments
             while (j >= gap && arr[j - gap] > temp) {
                 arr[j] = arr[j - gap];
-                document.getElementById(`elem${j}`).textContent = arr[j];
+                document.getElementById('e' + j).textContent = arr[j];
                 
-                updateElement(j - gap, 'swapping');
-                updateElement(j, 'swapping');
-                totalShifts++;
-                shifts.textContent = totalShifts;
+                update(j - gap, 'swapping');
+                update(j, 'swapping');
+                shift++; shiftEl.textContent = shift;
+                await sleep(300);
                 
-                await sleep(1500);
-                
-                // Réinitialisation couleurs
-                updateElement(j - gap, 'default');
-                updateElement(j, 'default');
+                update(j - gap, '');
+                update(j, '');
                 
                 j -= gap;
+                
+                if (j >= gap) {
+                    update(j - gap, 'comparing');
+                    update(j, 'comparing');
+                    comp++; compEl.textContent = comp;
+                    await sleep(300);
+                }
             }
             
-            // Insertion valeur
             if (j !== i) {
                 arr[j] = temp;
-                document.getElementById(`elem${j}`).textContent = temp;
-                updateElement(j, 'swapping');
-                await sleep(1500);
+                document.getElementById('e' + j).textContent = temp;
+                update(j, 'swapping');
+                await sleep(200);
             }
             
-            // Réinitialisation
-            for (let k = 0; k < n; k++) {
-                updateElement(k, k <= i ? 'sorted' : 'default');
-            }
+            for (let k = 0; k <= i; k++) update(k, 'sorted');
         }
         
         gap = Math.floor(gap / 3);
     }
     
-    // Finalisation
-    for (let i = 0; i < n; i++) updateElement(i, 'sorted');
-    stepsDiv.textContent = `Tri terminé! ${totalComparisons} comparaisons, ${totalShifts} décalages`;
-    
-    isAnimating = false;
+    steps.textContent = `Terminé! ${comp} comparaisons, ${shift} décalages`;
+    running = false;
     startBtn.disabled = false;
-    generateBtn.disabled = false;
 }
 
-// Événements
-generateBtn.onclick = generateRandomArray;
-startBtn.onclick = shellSortAnimation;
+function randomArray() {
+    if (running) return;
+    arr = Array.from({length: 10}, () => Math.floor(Math.random() * 90) + 10);
+    render();
+    gapEl.textContent = '-';
+    compEl.textContent = '0';
+    shiftEl.textContent = '0';
+    steps.textContent = 'Nouveau tableau généré';
+}
 
-// Initialisation
-initializeArray();
+speedBtn.onclick = () => {
+    if (speed === 1) { speed = 2; speedBtn.textContent = 'Vitesse: ×2'; }
+    else if (speed === 2) { speed = 4; speedBtn.textContent = 'Vitesse: ×4'; }
+    else { speed = 1; speedBtn.textContent = 'Vitesse: ×1'; }
+};
+
+startBtn.onclick = shellSort;
+randomBtn.onclick = randomArray;
+
+render();
 </script>
 </body>
 </html>
+
