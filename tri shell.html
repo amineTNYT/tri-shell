@@ -3,167 +3,523 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tri Shell</title>
+<title>Tri Shell - Animation Éducative</title>
 <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: Arial; background: #111; color: #fff; padding: 20px; }
-    .container { max-width: 800px; margin: 0 auto; }
-    h1 { text-align: center; margin: 20px 0; color: #0af; }
-    .controls { text-align: center; margin: 20px 0; }
-    button { padding: 10px 20px; margin: 0 5px; background: #0af; border: none; color: white; cursor: pointer; }
-    button:disabled { background: #555; cursor: not-allowed; }
-    .array { display: flex; justify-content: center; margin: 40px 0; height: 100px; }
-    .elem { width: 40px; height: 40px; background: #333; margin: 0 2px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-    .comparing { background: #fa0; }
-    .swapping { background: #f00; }
-    .sorted { background: #0a0; }
-    .steps { background: #222; padding: 15px; margin: 20px 0; border-radius: 5px; min-height: 60px; }
-    .stats { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #e2e8f0;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h1 { 
+    text-align: center;
+    color: #f1f5f9;
+    margin-bottom: 30px;
+    font-size: 36px;
+}
+
+.control-panel {
+    background: rgba(30, 41, 59, 0.8);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    border: 1px solid #334155;
+}
+
+.buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+button {
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    color: white;
+}
+
+#startBtn {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+#startBtn:hover:not(:disabled) {
+    transform: translateY(-2px);
+}
+
+#generateBtn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+#generateBtn:hover:not(:disabled) {
+    transform: translateY(-2px);
+}
+
+#speedBtn {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+}
+#speedBtn:hover:not(:disabled) {
+    transform: translateY(-2px);
+}
+
+button:disabled {
+    background: #475569;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.array-display {
+    background: rgba(15, 23, 42, 0.7);
+    padding: 40px 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    min-height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #334155;
+}
+
+.array-container {
+    display: flex;
+    gap: 15px;
+    align-items: flex-end;
+}
+
+.array-element {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    color: white;
+    position: relative;
+    border: 2px solid transparent;
+}
+
+.default {
+    background: linear-gradient(135deg, #475569 0%, #334155 100%);
+    border-color: #64748b;
+}
+
+.comparing {
+    background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+    border-color: #f59e0b;
+    transform: scale(1.15);
+    color: #1a1a1a;
+}
+
+.swapping {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    border-color: #ef4444;
+    transform: scale(1.2);
+}
+
+.current-gap {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    border-color: #8b5cf6;
+    transform: scale(1.1);
+}
+
+.sorted {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border-color: #10b981;
+}
+
+.in-gap-sequence {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border-color: #3b82f6;
+}
+
+.arrow {
+    position: absolute;
+    top: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 28px;
+    color: #fca5a5;
+}
+
+#steps {
+    margin: 30px 10px;
+    font-size: 18px;
+    min-height: 80px;
+    padding: 20px;
+    background: rgba(30, 41, 59, 0.8);
+    border-radius: 12px;
+    color: #e2e8f0;
+    border: 1px solid #334155;
+    line-height: 1.6;
+}
+
+.status-panel {
+    background: rgba(30, 41, 59, 0.8);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    border: 1px solid #334155;
+}
+
+.status-panel h3 {
+    color: #f1f5f9;
+    margin-bottom: 15px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.status-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.info-item {
+    background: rgba(15, 23, 42, 0.6);
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 4px solid #3b82f6;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.info-label {
+    font-weight: 600;
+    color: #cbd5e1;
+    font-size: 14px;
+}
+
+.info-value {
+    font-size: 24px;
+    color: #f1f5f9;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.watermark {
+    position: fixed;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 23, 42, 0.95);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    z-index: 1000;
+    border: 2px solid #10b981;
+}
+
+.watermark a {
+    color: #10b981;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .array-element {
+        width: 55px;
+        height: 55px;
+        font-size: 20px;
+    }
+    
+    h1 {
+        font-size: 28px;
+    }
+}
 </style>
 </head>
 <body>
+
 <div class="container">
-    <h1>Tri Shell</h1>
-    
-    <div class="controls">
-        <button id="startBtn">Démarrer</button>
-        <button id="randomBtn">Nouveau</button>
-        <button id="speedBtn">Vitesse: ×1</button>
+    <h1>Tri Shell (Shell Sort)</h1>
+
+    <div class="control-panel">
+        <div class="buttons">
+            <button id="startBtn">Démarrer l'Animation</button>
+            <button id="generateBtn">Générer Nouvel Exemple</button>
+            <button id="speedBtn">Vitesse: Lent (×1)</button>
+        </div>
     </div>
-    
-    <div class="stats">
-        <div>Pas: <span id="gap">-</span></div>
-        <div>Comparaisons: <span id="comp">0</span></div>
-        <div>Décalages: <span id="shift">0</span></div>
+
+    <div class="array-display">
+        <div class="array-container" id="arrayContainer"></div>
     </div>
-    
-    <div class="array" id="array"></div>
-    
-    <div class="steps" id="steps">Prêt.</div>
+
+    <div id="steps">Cliquez sur le bouton pour commencer l'animation.</div>
+
+    <div class="status-panel">
+        <h3>État de l'Animation</h3>
+        <div class="status-info">
+            <div class="info-item">
+                <div class="info-label">Pas actuel</div>
+                <div class="info-value" id="currentGap">-</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Comparaisons</div>
+                <div class="info-value" id="comparisons">0</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Décalages</div>
+                <div class="info-value" id="shifts">0</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Sous-séquences</div>
+                <div class="info-value" id="subsequences">0</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="watermark">
+    Créé par <strong>Amine</strong> | GitHub: <a href="https://github.com/AmineTNYT" target="_blank">@AmineTNYT</a>
 </div>
 
 <script>
-let arr = [35, 33, 42, 10, 14, 19, 27, 44, 26, 31];
-let running = false;
-let speed = 1;
-
+const arrayContainer = document.getElementById('arrayContainer');
 const startBtn = document.getElementById('startBtn');
-const randomBtn = document.getElementById('randomBtn');
+const generateBtn = document.getElementById('generateBtn');
 const speedBtn = document.getElementById('speedBtn');
-const steps = document.getElementById('steps');
-const gapEl = document.getElementById('gap');
-const compEl = document.getElementById('comp');
-const shiftEl = document.getElementById('shift');
-const arrayEl = document.getElementById('array');
+const stepsDiv = document.getElementById('steps');
+const currentGap = document.getElementById('currentGap');
+const comparisons = document.getElementById('comparisons');
+const shifts = document.getElementById('shifts');
+const subsequences = document.getElementById('subsequences');
 
-function render() {
-    arrayEl.innerHTML = '';
-    arr.forEach((val, i) => {
-        const div = document.createElement('div');
-        div.className = 'elem';
-        div.id = 'e' + i;
-        div.textContent = val;
-        arrayEl.appendChild(div);
-    });
-}
-
-function update(i, cls) {
-    const el = document.getElementById('e' + i);
-    if (el) el.className = 'elem ' + cls;
-}
-
-function sleep(ms) {
-    return new Promise(r => setTimeout(r, ms / speed));
-}
-
-async function shellSort() {
-    if (running) return;
-    running = true;
-    startBtn.disabled = true;
-    
-    const n = arr.length;
-    let comp = 0, shift = 0;
-    
-    // Calcul gaps (Knuth)
-    let gap = 1;
-    while (gap < n) gap = gap * 3 + 1;
-    gap = Math.floor(gap / 3);
-    
-    while (gap > 0) {
-        gapEl.textContent = gap;
-        steps.textContent = `Pas = ${gap}`;
-        await sleep(500);
-        
-        for (let i = gap; i < n; i++) {
-            const temp = arr[i];
-            let j = i;
-            
-            update(i, 'comparing');
-            if (j - gap >= 0) update(j - gap, 'comparing');
-            comp++; compEl.textContent = comp;
-            await sleep(300);
-            
-            while (j >= gap && arr[j - gap] > temp) {
-                arr[j] = arr[j - gap];
-                document.getElementById('e' + j).textContent = arr[j];
-                
-                update(j - gap, 'swapping');
-                update(j, 'swapping');
-                shift++; shiftEl.textContent = shift;
-                await sleep(300);
-                
-                update(j - gap, '');
-                update(j, '');
-                
-                j -= gap;
-                
-                if (j >= gap) {
-                    update(j - gap, 'comparing');
-                    update(j, 'comparing');
-                    comp++; compEl.textContent = comp;
-                    await sleep(300);
-                }
-            }
-            
-            if (j !== i) {
-                arr[j] = temp;
-                document.getElementById('e' + j).textContent = temp;
-                update(j, 'swapping');
-                await sleep(200);
-            }
-            
-            for (let k = 0; k <= i; k++) update(k, 'sorted');
-        }
-        
-        gap = Math.floor(gap / 3);
-    }
-    
-    steps.textContent = `Terminé! ${comp} comparaisons, ${shift} décalages`;
-    running = false;
-    startBtn.disabled = false;
-}
-
-function randomArray() {
-    if (running) return;
-    arr = Array.from({length: 10}, () => Math.floor(Math.random() * 90) + 10);
-    render();
-    gapEl.textContent = '-';
-    compEl.textContent = '0';
-    shiftEl.textContent = '0';
-    steps.textContent = 'Nouveau tableau généré';
-}
+let arr = [];
+let isAnimating = false;
+let speedLevel = 1;
+let baseDelay = 1000;
+let gapSequence = [];
 
 speedBtn.onclick = () => {
-    if (speed === 1) { speed = 2; speedBtn.textContent = 'Vitesse: ×2'; }
-    else if (speed === 2) { speed = 4; speedBtn.textContent = 'Vitesse: ×4'; }
-    else { speed = 1; speedBtn.textContent = 'Vitesse: ×1'; }
+    if (speedLevel === 1) {
+        speedLevel = 2; baseDelay = 500; speedBtn.textContent = "Vitesse: Normal (×2)";
+    } else if (speedLevel === 2) {
+        speedLevel = 4; baseDelay = 250; speedBtn.textContent = "Vitesse: Rapide (×4)";
+    } else {
+        speedLevel = 1; baseDelay = 1000; speedBtn.textContent = "Vitesse: Lent (×1)";
+    }
 };
 
-startBtn.onclick = shellSort;
-randomBtn.onclick = randomArray;
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms / speedLevel));
+}
 
-render();
+function initializeSimpleExample() {
+    arr = [35, 33, 42, 10, 14, 19, 27, 44, 26, 31];
+    renderArray();
+    resetStats();
+    stepsDiv.innerHTML = "Exemple simple avec 10 éléments démontrant l'efficacité du Tri Shell<br>Cliquez sur 'Démarrer l'Animation' pour voir le tri en action.";
+}
+
+function generateRandomArray() {
+    const length = 12;
+    arr = Array.from({length}, () => Math.floor(Math.random() * 90) + 10);
+    renderArray();
+    resetStats();
+    stepsDiv.innerHTML = `Nouvel exemple avec ${length} éléments : [${arr.join(', ')}]<br>Cliquez sur 'Démarrer l'Animation' pour voir le tri.`;
+}
+
+function renderArray() {
+    const fragment = document.createDocumentFragment();
+    arr.forEach((val, i) => {
+        const div = document.createElement('div');
+        div.className = 'array-element default';
+        div.id = `elem${i}`;
+        div.textContent = val;
+        fragment.appendChild(div);
+    });
+    arrayContainer.innerHTML = '';
+    arrayContainer.appendChild(fragment);
+}
+
+function resetStats() {
+    currentGap.textContent = '-';
+    comparisons.textContent = '0';
+    shifts.textContent = '0';
+    subsequences.textContent = '0';
+    gapSequence = [];
+}
+
+function updateElement(index, className) {
+    document.getElementById(`elem${index}`).className = `array-element ${className}`;
+}
+
+function highlightGapSequence(start, gap) {
+    for (let i = 0; i < arr.length; i++) {
+        updateElement(i, 'default');
+    }
+    
+    for (let i = start; i < arr.length; i += gap) {
+        updateElement(i, 'in-gap-sequence');
+    }
+    
+    updateElement(start, 'current-gap');
+}
+
+function calculateGapSequence(n) {
+    const gaps = [];
+    let p = 0;
+    
+    while (p < n) {
+        p = 3 * p + 1;
+    }
+    
+    while (p > 0) {
+        p = Math.floor(p / 3);
+        if (p > 0) {
+            gaps.push(p);
+        }
+    }
+    
+    return gaps;
+}
+
+async function shellSortAnimation() {
+    if (isAnimating) return;
+    
+    isAnimating = true;
+    startBtn.disabled = true;
+    generateBtn.disabled = true;
+    startBtn.textContent = 'Animation en cours...';
+
+    const n = arr.length;
+    let totalComparisons = 0;
+    let totalShifts = 0;
+    
+    gapSequence = calculateGapSequence(n);
+
+    stepsDiv.innerHTML = "<strong>Tableau initial non trié</strong><br>Calcul de la séquence des pas (gaps)...";
+    await sleep(2000);
+
+    for (let gapIdx = 0; gapIdx < gapSequence.length; gapIdx++) {
+        const gap = gapSequence[gapIdx];
+        currentGap.textContent = gap;
+        
+        stepsDiv.innerHTML = `<strong>Pas = ${gap}</strong><br>Début du tri par insertion avec ce pas. Le tableau est divisé en ${gap} sous-séquences.`;
+        await sleep(2000);
+
+        for (let start = 0; start < gap; start++) {
+            subsequences.textContent = `${start + 1}/${gap}`;
+            highlightGapSequence(start, gap);
+            
+            stepsDiv.innerHTML = `<strong>Pas = ${gap}</strong> | Sous-séquence ${start + 1}/${gap}<br>Tri par insertion des éléments aux positions: ${Array.from({length: Math.ceil((n-start)/gap)}, (_, i) => start + i*gap).join(', ')}`;
+            await sleep(2000);
+
+            for (let i = start + gap; i < n; i += gap) {
+                const v = arr[i];
+                let j = i;
+                
+                const arrow = document.createElement('div');
+                arrow.className = 'arrow';
+                arrow.textContent = '↓';
+                document.getElementById(`elem${i}`).appendChild(arrow);
+                
+                updateElement(i, 'comparing');
+                updateElement(j - gap, 'comparing');
+                
+                totalComparisons++;
+                comparisons.textContent = totalComparisons;
+                
+                stepsDiv.innerHTML = `<strong>Pas = ${gap}</strong> | Sous-séquence ${start + 1}/${gap}<br>Comparaison: arr[${j-gap}] (${arr[j-gap]}) > v (${v}) ?`;
+                await sleep(2000);
+
+                while (j >= start + gap && arr[j - gap] > v) {
+                    arr[j] = arr[j - gap];
+                    document.getElementById(`elem${j}`).textContent = arr[j];
+                    
+                    updateElement(j - gap, 'swapping');
+                    updateElement(j, 'swapping');
+                    
+                    totalShifts++;
+                    shifts.textContent = totalShifts;
+                    
+                    stepsDiv.innerHTML = `<strong>Pas = ${gap}</strong> | Sous-séquence ${start + 1}/${gap}<br>Décalage: arr[${j}] ← arr[${j-gap}] (${arr[j]})<br>j ← ${j} - ${gap} = ${j-gap}`;
+                    await sleep(2000);
+                    
+                    updateElement(j - gap, 'in-gap-sequence');
+                    updateElement(j, 'in-gap-sequence');
+                    
+                    j -= gap;
+                    
+                    if (j >= start + gap) {
+                        updateElement(j - gap, 'comparing');
+                        updateElement(j, 'comparing');
+                        
+                        totalComparisons++;
+                        comparisons.textContent = totalComparisons;
+                        
+                        stepsDiv.innerHTML = `<strong>Pas = ${gap}</strong> | Sous-séquence ${start + 1}/${gap}<br>Nouvelle comparaison: arr[${j-gap}] (${arr[j-gap]}) > v (${v}) ?`;
+                        await sleep(2000);
+                    }
+                }
+                
+                arrow.remove();
+                
+                if (j !== i) {
+                    arr[j] = v;
+                    document.getElementById(`elem${j}`).textContent = v;
+                    updateElement(j, 'swapping');
+                    
+                    stepsDiv.innerHTML = `<strong>Pas = ${gap}</strong> | Sous-séquence ${start + 1}/${gap}<br>Insertion: arr[${j}] ← v (${v})`;
+                    await sleep(1500);
+                    
+                    updateElement(j, 'in-gap-sequence');
+                }
+                
+                highlightGapSequence(start, gap);
+            }
+            
+            if (gapIdx === gapSequence.length - 1) {
+                for (let i = start; i < n; i += gap) {
+                    updateElement(i, 'sorted');
+                }
+            }
+        }
+        
+        stepsDiv.innerHTML = `<strong>Pas = ${gap} terminé</strong><br>${gap === 1 ? 'Dernier passage avec pas=1 (tri par insertion classique)' : 'Passage au pas suivant...'}`;
+        await sleep(2000);
+    }
+
+    for (let i = 0; i < n; i++) {
+        updateElement(i, 'sorted');
+        await sleep(150);
+    }
+
+    stepsDiv.innerHTML = `<strong>Tri Shell terminé !</strong> Le tableau est complètement trié.<br><br>Résumé : ${gapSequence.length} passes avec différents pas, ${totalComparisons} comparaisons, ${totalShifts} décalages`;
+
+    isAnimating = false;
+    startBtn.disabled = false;
+    generateBtn.disabled = false;
+    startBtn.textContent = 'Démarrer l\'Animation';
+}
+
+generateBtn.onclick = generateRandomArray;
+startBtn.onclick = shellSortAnimation;
+
+initializeSimpleExample();
 </script>
+
 </body>
 </html>
-
