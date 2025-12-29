@@ -3,625 +3,119 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tri Shell - Animation Éducative</title>
+<title>Tri Shell - Animation</title>
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-        color: #e2e8f0; /* Texte clair sur fond sombre */
-        padding: 20px;
-        padding-bottom: 100px;
-        min-height: 100vh;
-    }
-
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    h1 { 
-        text-align: center;
-        color: #f1f5f9; /* Blanc cassé */
-        margin-bottom: 30px;
-        font-size: 36px;
-        text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    }
-
-    .control-panel {
-        background: rgba(30, 41, 59, 0.8); /* Fond sombre transparent */
-        padding: 25px;
-        border-radius: 12px; /* Arrondi plus prononcé */
-        box-shadow: 0 4px 15px rgba(0,0,0,0.4); /* Ombre plus prononcée */
-        margin-bottom: 30px;
-        border: 1px solid #334155; /* Bordure subtile */
-        backdrop-filter: blur(10px); /* Effet de flou */
-    }
-
-    .buttons {
-        display: flex;
-        gap: 15px;
-        flex-wrap: wrap;
-        justify-content: center;
-        margin-bottom: 20px;
-    }
-
-    button {
-        padding: 12px 24px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        border: none;
-        border-radius: 8px; /* Arrondi plus prononcé */
-        transition: all 0.3s;
-        color: white;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }
-
-    #startBtn {
-        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    }
-    #startBtn:hover:not(:disabled) {
-        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
-    }
-
-    #generateBtn {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    }
-    #generateBtn:hover:not(:disabled) {
-        background: linear-gradient(135deg, #059669 0%, #047857 100%);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
-    }
-
-    #speedBtn {
-        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-    }
-    #speedBtn:hover:not(:disabled) {
-        background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
-    }
-
-    button:disabled {
-        background: #475569;
-        cursor: not-allowed;
-        opacity: 0.6;
-        transform: none !important;
-        box-shadow: none !important;
-    }
-
-    .array-display {
-        background: rgba(15, 23, 42, 0.7); /* Fond très sombre */
-        padding: 40px 20px;
-        border-radius: 12px;
-        box-shadow: 
-            0 4px 20px rgba(0,0,0,0.5),
-            inset 0 1px 0 rgba(255,255,255,0.1);
-        margin-bottom: 30px;
-        min-height: 200px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        border: 1px solid #334155;
-    }
-
-    .array-container {
-        display: flex;
-        gap: 15px;
-        align-items: flex-end;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: sans-serif; background: #0f172a; color: #e2e8f0; padding: 20px; min-height: 100vh; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1 { text-align: center; margin: 20px 0; color: #f1f5f9; }
+    
+    /* Panneau de contrôle */
+    .control-panel { background: #1e293b; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+    .buttons { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+    button { padding: 12px 24px; border: none; border-radius: 8px; color: white; cursor: pointer; }
+    #startBtn { background: #3b82f6; }
+    #generateBtn { background: #10b981; }
+    #speedBtn { background: #8b5cf6; }
+    button:disabled { background: #475569; cursor: not-allowed; }
+    
+    /* Affichage tableau */
+    .array-display { background: #1e293b; padding: 30px; border-radius: 10px; margin: 20px 0; }
+    .array-container { display: flex; gap: 10px; align-items: flex-end; justify-content: center; }
     .array-element {
-        width: 70px;
-        height: 70px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-        font-weight: bold;
-        border-radius: 8px;
-        transition: all 0.4s ease;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-        color: white; /* Toujours blanc pour meilleur contraste */
-        position: relative;
-        border: 2px solid transparent;
-        text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;
+        border-radius: 8px; font-weight: bold; color: white; transition: all 0.3s;
     }
-
-    .default {
-        background: linear-gradient(135deg, #475569 0%, #334155 100%);
-        border-color: #64748b;
+    .default { background: #475569; }
+    .comparing { background: #f59e0b; transform: scale(1.1); }
+    .swapping { background: #ef4444; animation: pulse 1s infinite; }
+    .current-gap { background: #8b5cf6; }
+    .sorted { background: #10b981; }
+    @keyframes pulse { 
+        0%,100% { transform: scale(1.1); } 
+        50% { transform: scale(1.2); } 
     }
-
-    .comparing {
-        background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
-        border-color: #f59e0b;
-        transform: scale(1.15);
-        box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
-        color: #1a1a1a; /* Texte sombre sur fond jaune */
-    }
-
-    .swapping {
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        border-color: #ef4444;
-        transform: scale(1.2);
-        animation: pulse 1s infinite;
-        box-shadow: 0 4px 20px rgba(239, 68, 68, 0.5);
-        color: white;
-    }
-
-    .current-gap {
-        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-        border-color: #8b5cf6;
-        transform: scale(1.1);
-        box-shadow: 0 3px 15px rgba(139, 92, 246, 0.4);
-        color: white;
-    }
-
-    .sorted {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        border-color: #10b981;
-        box-shadow: 0 3px 15px rgba(16, 185, 129, 0.4);
-        color: white;
-    }
-
-    .in-gap-sequence {
-        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-        border-color: #3b82f6;
-        box-shadow: 0 3px 15px rgba(59, 130, 246, 0.4);
-        color: white;
-    }
-
-    @keyframes pulse {
-        0% { transform: scale(1.1); box-shadow: 0 3px 15px rgba(239, 68, 68, 0.4); }
-        50% { transform: scale(1.25); box-shadow: 0 5px 25px rgba(239, 68, 68, 0.6); }
-        100% { transform: scale(1.1); box-shadow: 0 3px 15px rgba(239, 68, 68, 0.4); }
-    }
-
-    .arrow {
-        position: absolute;
-        top: -40px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 32px;
-        color: #fca5a5; /* Rouge clair pour mieux ressortir */
-        animation: bounce 1.5s infinite;
-        text-shadow: 0 2px 5px rgba(0,0,0,0.5);
-        filter: drop-shadow(0 2px 3px rgba(0,0,0,0.7));
-    }
-
-    .gap-indicator {
-        position: absolute;
-        bottom: -30px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 16px;
-        font-weight: bold;
-        color: #c4b5fd;
-        background: rgba(30, 41, 59, 0.9);
-        padding: 4px 12px;
-        border-radius: 20px;
-        border: 1px solid #8b5cf6;
-        backdrop-filter: blur(5px);
-        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    }
-
-    @keyframes bounce {
-        0%, 100% { transform: translateX(-50%) translateY(0); }
-        50% { transform: translateX(-50%) translateY(-10px); }
-    }
-
-    #steps {
-        margin: 30px 10px;
-        max-width: 95%;
-        font-size: 18px;
-        min-height: 80px;
-        padding: 20px;
-        background: rgba(30, 41, 59, 0.8);
-        border-radius: 12px;
-        color: #e2e8f0;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-        line-height: 1.6;
-        border: 1px solid #334155;
-        backdrop-filter: blur(10px);
-    }
-
-    .status-panel {
-        background: rgba(30, 41, 59, 0.8);
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-        margin-bottom: 30px;
-        border: 1px solid #334155;
-        backdrop-filter: blur(10px);
-    }
-
-    .status-panel h3 {
-        color: #f1f5f9;
-        margin-bottom: 15px;
-        font-size: 20px;
-        text-align: center;
-        text-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    }
-
-    .status-info {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
-        margin-bottom: 20px;
-    }
-
-    .info-item {
-        background: rgba(15, 23, 42, 0.6);
-        padding: 12px;
-        border-radius: 8px;
-        border-left: 4px solid #3b82f6;
-        text-align: center;
-        transition: all 0.3s;
-        border: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .info-item:hover {
-        transform: translateY(-2px);
-        background: rgba(15, 23, 42, 0.8);
-        border-left: 4px solid #60a5fa;
-    }
-
-    .info-label {
-        font-weight: 600;
-        color: #cbd5e1;
-        font-size: 14px;
-    }
-
-    .info-value {
-        font-size: 24px;
-        color: #f1f5f9;
-        font-weight: bold;
-        margin-top: 5px;
-        text-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    }
-
-    .code-section {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-        gap: 30px;
-        margin-bottom: 30px;
-    }
-
-    .code-block {
-        background: #0f172a; /* Fond plus sombre */
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 
-            0 4px 20px rgba(0,0,0,0.5),
-            inset 0 1px 0 rgba(255,255,255,0.1);
-        border: 1px solid #334155;
-        transition: all 0.3s;
-    }
-
-    .code-block:hover {
-        transform: translateY(-5px);
-        box-shadow: 
-            0 8px 30px rgba(0,0,0,0.6),
-            inset 0 1px 0 rgba(255,255,255,0.1);
-    }
-
-    .code-block h3 {
-        color: #fbbf24; /* Jaune doré */
-        margin-bottom: 20px;
-        font-size: 20px;
-        text-align: center;
-        text-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    }
-
-    .code-block pre {
-        color: #e2e8f0;
-        font-family: 'Courier New', monospace;
-        font-size: 15px;
-        line-height: 1.6;
-        overflow-x: auto;
-        text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-    }
-
-    /* Syntax highlighting colors */
-    .keyword { color: #c084fc; font-weight: bold; text-shadow: 0 0 5px rgba(192, 132, 252, 0.3); }
-    .function { color: #60a5fa; }
-    .string { color: #34d399; }
-    .comment { color: #94a3b8; font-style: italic; }
-    .number { color: #fbbf24; }
-    .variable { color: #f472b6; }
-    .operator { color: #fb923c; }
-
-    .tdol-table {
-        background: rgba(30, 41, 59, 0.8);
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-        margin-bottom: 30px;
-        border: 1px solid #334155;
-        backdrop-filter: blur(10px);
-    }
-
-    .tdol-table h3 {
-        color: #f1f5f9;
-        margin-bottom: 20px;
-        text-align: center;
-        font-size: 22px;
-        text-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 10px;
-    }
-
-    th, td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #475569;
-    }
-
-    th {
-        background: rgba(15, 23, 42, 0.8);
-        color: #f1f5f9;
-        font-weight: 600;
-        border-top: 2px solid #3b82f6;
-    }
-
-    td {
-        background: rgba(15, 23, 42, 0.5);
-        color: #e2e8f0;
-    }
-
-    tr:hover td {
-        background: rgba(30, 41, 59, 0.8);
-    }
-
-    tr:last-child td {
-        border-bottom: none;
-    }
-
+    
+    /* État et code */
+    #steps { background: #1e293b; padding: 20px; border-radius: 10px; margin: 20px 0; }
+    .status-info { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin: 20px 0; }
+    .info-item { background: #0f172a; padding: 15px; border-radius: 8px; text-align: center; }
+    .code-block { background: #0f172a; padding: 20px; border-radius: 10px; margin: 20px 0; }
+    pre { color: #e2e8f0; overflow-x: auto; }
+    
+    /* Watermark */
     .watermark {
-        position: fixed;
-        bottom: 15px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.9) 100%);
-        color: white;
-        padding: 15px 30px;
-        border-radius: 10px;
-        font-size: 16px;
-        font-weight: 600;
-        z-index: 1000;
-        box-shadow: 
-            0 4px 25px rgba(0,0,0,0.5),
-            0 0 20px rgba(16, 185, 129, 0.3);
-        border: 2px solid #10b981;
-        animation: watermarkFloat 4s infinite ease-in-out;
-        transition: all 0.3s;
-        backdrop-filter: blur(10px);
+        position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
+        background: #1e293b; color: white; padding: 12px 25px; border-radius: 8px;
+        text-align: center; border: 2px solid #10b981;
     }
-
-    .watermark:hover {
-        animation-play-state: paused;
-        transform: translateX(-50%) scale(1.05);
-        border-color: #34d399;
-        box-shadow: 
-            0 6px 30px rgba(0,0,0,0.6),
-            0 0 25px rgba(52, 211, 153, 0.5);
-    }
-
-    .watermark a {
-        color: #10b981;
-        text-decoration: none;
-        font-weight: bold;
-        transition: all 0.3s;
-        animation: linkPulse 2s infinite;
-        text-shadow: 0 0 5px rgba(16, 185, 129, 0.5);
-    }
-
-    .watermark a:hover {
-        color: #ffffff;
-        text-shadow: 0 0 10px #10b981;
-        animation: none;
-    }
-
-    @keyframes watermarkFloat {
-        0%, 100% {
-            transform: translateX(-50%) translateY(0);
-        }
-        50% {
-            transform: translateX(-50%) translateY(-5px);
-        }
-    }
-
-    @keyframes linkPulse {
-        0%, 100% {
-            color: #10b981;
-            text-shadow: 0 0 5px rgba(16, 185, 129, 0.5);
-        }
-        50% {
-            color: #34d399;
-            text-shadow: 0 0 10px rgba(52, 211, 153, 0.8);
-        }
-    }
-
+    
     @media (max-width: 768px) {
-        .code-section {
-            grid-template-columns: 1fr;
-        }
-        
-        .array-element {
-            width: 55px;
-            height: 55px;
-            font-size: 20px;
-        }
-        
-        h1 {
-            font-size: 28px;
-        }
-        
-        .watermark {
-            font-size: 14px;
-            padding: 12px 20px;
-        }
-        
-        .arrow {
-            top: -35px;
-            font-size: 28px;
-        }
-        
-        body {
-            padding: 15px;
-            padding-bottom: 80px;
-        }
+        .array-element { width: 45px; height: 45px; }
+        button { padding: 10px 20px; font-size: 14px; }
     }
 </style>
 </head>
 <body>
-
 <div class="container">
     <h1>Tri Shell (Shell Sort)</h1>
-
+    
+    <!-- Contrôles -->
     <div class="control-panel">
         <div class="buttons">
-            <button id="startBtn">Démarrer l'Animation</button>
-            <button id="generateBtn">Générer Nouvel Exemple</button>
-            <button id="speedBtn">Vitesse: Lent (×1)</button>
+            <button id="startBtn">Démarrer</button>
+            <button id="generateBtn">Nouveau Tableau</button>
+            <button id="speedBtn">Vitesse: ×1</button>
         </div>
     </div>
-
+    
+    <!-- Tableau animé -->
     <div class="array-display">
         <div class="array-container" id="arrayContainer"></div>
     </div>
-
-    <div id="steps">Cliquez sur le bouton pour commencer l'animation.</div>
-
-    <div class="status-panel">
-        <h3>État de l'Animation</h3>
-        <div class="status-info">
-            <div class="info-item">
-                <div class="info-label">Pas actuel</div>
-                <div class="info-value" id="currentGap">-</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">Comparaisons</div>
-                <div class="info-value" id="comparisons">0</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">Décalages</div>
-                <div class="info-value" id="shifts">0</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">Sous-séquences</div>
-                <div class="info-value" id="subsequences">0</div>
-            </div>
-        </div>
+    
+    <!-- Description étapes -->
+    <div id="steps">Prêt à commencer...</div>
+    
+    <!-- Statistiques -->
+    <div class="status-info">
+        <div class="info-item"><div>Pas actuel</div><div id="currentGap">-</div></div>
+        <div class="info-item"><div>Comparaisons</div><div id="comparisons">0</div></div>
+        <div class="info-item"><div>Décalages</div><div id="shifts">0</div></div>
     </div>
-
-    <div class="code-section">
-        <div class="code-block">
-            <h3>📋 Algorithme du Tri Shell</h3>
-            <pre><span class="keyword">procédure</span> <span class="function">tri_shell</span> (<span class="operator">@</span> T:tab ; N:entier)
-<span class="keyword">Début</span>
-    p <span class="operator">←</span> <span class="number">0</span>
     
-    <span class="keyword">Tant que</span> (p <span class="operator">&lt;</span> N) <span class="keyword">faire</span>
-        p <span class="operator">←</span> <span class="number">3</span> <span class="operator">×</span> p <span class="operator">+</span> <span class="number">1</span>
-    <span class="keyword">Fin Tant que</span>
-
-    <span class="keyword">Tant que</span> (p <span class="operator">≠</span> <span class="number">0</span>) <span class="keyword">faire</span>
-        p <span class="operator">←</span> p <span class="keyword">div</span> <span class="number">3</span>
-
-        <span class="keyword">Pour</span> i <span class="keyword">de</span> p <span class="keyword">à</span> N<span class="operator">-</span><span class="number">1</span> <span class="keyword">faire</span>
-            v <span class="operator">←</span> T[i]
-            j <span class="operator">←</span> i
-
-            <span class="keyword">Tant que</span> (j <span class="operator">≥</span> p) <span class="keyword">et</span> (T[j <span class="operator">-</span> p] <span class="operator">&gt;</span> v) <span class="keyword">faire</span>
-                T[j] <span class="operator">←</span> T[j <span class="operator">-</span> p]
-                j <span class="operator">←</span> j <span class="operator">-</span> p
-            <span class="keyword">Fin Tant que</span>
-
-            T[j] <span class="operator">←</span> v
-        <span class="keyword">Fin Pour</span>
-    <span class="keyword">Fin Tant que</span>
-<span class="keyword">Fin</span></pre>
-        </div>
-
-        <div class="code-block">
-            <h3>🐍 Implémentation Python</h3>
-            <pre><span class="keyword">def</span> <span class="function">tri_shell</span>(T):
-    N = <span class="function">len</span>(T)
-    p = <span class="number">0</span>
+    <!-- Algorithme -->
+    <div class="code-block">
+        <h3>Algorithme du Tri Shell</h3>
+        <pre>procédure tri_shell(@T:tab; N:entier)
+Début
+    p ← 0
+    Tant que (p < N) faire
+        p ← 3 × p + 1
+    Fin Tant que
     
-    <span class="keyword">while</span> p < N:
-        p = <span class="number">3</span> * p + <span class="number">1</span>
-    
-    <span class="keyword">while</span> p != <span class="number">0</span>:
-        p = p // <span class="number">3</span>
-        
-        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(p, N):
-            v = T[i]
-            j = i
-            
-            <span class="keyword">while</span> j >= p <span class="keyword">and</span> T[j - p] > v:
-                T[j] = T[j - p]
-                j -= p
-            T[j] = v
-
-<span class="comment"># Exemple d'utilisation</span>
-T = [<span class="number">35</span>, <span class="number">33</span>, <span class="number">42</span>, <span class="number">10</span>, <span class="number">14</span>, <span class="number">19</span>, <span class="number">27</span>, <span class="number">44</span>, <span class="number">26</span>, <span class="number">31</span>]
-<span class="function">tri_shell</span>(T)
-<span class="function">print</span>(T)  <span class="comment"># [10, 14, 19, 26, 27, 31, 33, 35, 42, 44]</span></pre>
-        </div>
-    </div>
-
-    <div class="tdol-table">
-        <h3>📊 Tableau TDOL </h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Objet</th>
-                    <th>Nature / Type</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>p</strong></td>
-                    <td>Entier</td>
-                </tr>
-                <tr>
-                    <td><strong>i</strong></td>
-                    <td>Entier</td>
-                </tr>
-                <tr>
-                    <td><strong>j</strong></td>
-                    <td>Entier</td>
-                </tr>
-                <tr>
-                    <td><strong>v</strong></td>
-                    <td>Entier</td>
-                </tr>
-            </tbody>
-        </table>
+    Tant que (p ≠ 0) faire
+        p ← p div 3
+        Pour i de p à N-1 faire
+            v ← T[i]
+            j ← i
+            Tant que (j ≥ p) et (T[j-p] > v) faire
+                T[j] ← T[j-p]
+                j ← j - p
+            Fin Tant que
+            T[j] ← v
+        Fin Pour
+    Fin Tant que
+Fin</pre>
     </div>
 </div>
 
 <div class="watermark">
-    Créé par <strong>Amine</strong> | GitHub: <a href="https://github.com/AmineTNYT" target="_blank">@AmineTNYT</a>
+    Créé par Amine | GitHub: <a href="https://github.com/AmineTNYT" target="_blank" style="color:#10b981;">@AmineTNYT</a>
 </div>
 
 <script>
+// Éléments DOM
 const arrayContainer = document.getElementById('arrayContainer');
 const startBtn = document.getElementById('startBtn');
 const generateBtn = document.getElementById('generateBtn');
@@ -630,53 +124,40 @@ const stepsDiv = document.getElementById('steps');
 const currentGap = document.getElementById('currentGap');
 const comparisons = document.getElementById('comparisons');
 const shifts = document.getElementById('shifts');
-const subsequences = document.getElementById('subsequences');
 
+// Variables globales
 let arr = [];
 let isAnimating = false;
-let currentExample = 'simple';
-
-// Speed settings
 let speedLevel = 1;
 let baseDelay = 1000;
 
-// Shell Sort specific variables
-let gapSequence = [];
-let currentGapIndex = 0;
-let currentSubsequence = 0;
-let totalSubsequences = 0;
-
+// Gestion vitesse
 speedBtn.onclick = () => {
-    if (speedLevel === 1) {
-        speedLevel = 2; baseDelay = 500; speedBtn.textContent = "Vitesse: Normal (×2)";
-    } else if (speedLevel === 2) {
-        speedLevel = 4; baseDelay = 250; speedBtn.textContent = "Vitesse: Rapide (×4)";
-    } else {
-        speedLevel = 1; baseDelay = 1000; speedBtn.textContent = "Vitesse: Lent (×1)";
-    }
+    if (speedLevel === 1) { speedLevel = 2; baseDelay = 500; speedBtn.textContent = "Vitesse: ×2"; }
+    else if (speedLevel === 2) { speedLevel = 4; baseDelay = 250; speedBtn.textContent = "Vitesse: ×4"; }
+    else { speedLevel = 1; baseDelay = 1000; speedBtn.textContent = "Vitesse: ×1"; }
 };
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms / speedLevel));
-}
+// Fonction pause
+function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms / speedLevel)); }
 
-function initializeSimpleExample() {
+// Initialisation tableau
+function initializeArray() {
     arr = [35, 33, 42, 10, 14, 19, 27, 44, 26, 31];
-    currentExample = 'simple';
     renderArray();
     resetStats();
-    stepsDiv.innerHTML = "Exemple simple avec 10 éléments démontrant l'efficacité du Tri Shell<br>Cliquez sur 'Démarrer l'Animation' pour voir le tri en action.";
+    stepsDiv.textContent = "Cliquez sur 'Démarrer' pour lancer l'animation.";
 }
 
+// Génération aléatoire
 function generateRandomArray() {
-    const length = 12;
-    arr = Array.from({length}, () => Math.floor(Math.random() * 90) + 10);
-    currentExample = 'random';
+    arr = Array.from({length: 10}, () => Math.floor(Math.random() * 90) + 10);
     renderArray();
     resetStats();
-    stepsDiv.innerHTML = `Nouvel exemple avec ${length} éléments : [${arr.join(', ')}]<br>Cliquez sur 'Démarrer l'Animation' pour voir le tri.`;
+    stepsDiv.textContent = "Nouveau tableau généré. Cliquez sur 'Démarrer'.";
 }
 
+// Affichage tableau
 function renderArray() {
     arrayContainer.innerHTML = '';
     arr.forEach((val, i) => {
@@ -684,227 +165,106 @@ function renderArray() {
         div.className = 'array-element default';
         div.id = `elem${i}`;
         div.textContent = val;
-        
-        // Add gap indicator placeholder
-        const gapIndicator = document.createElement('div');
-        gapIndicator.className = 'gap-indicator';
-        gapIndicator.id = `gap${i}`;
-        gapIndicator.style.display = 'none';
-        div.appendChild(gapIndicator);
-        
         arrayContainer.appendChild(div);
     });
 }
 
+// Réinitialisation stats
 function resetStats() {
     currentGap.textContent = '-';
     comparisons.textContent = '0';
     shifts.textContent = '0';
-    subsequences.textContent = '0';
-    gapSequence = [];
-    currentGapIndex = 0;
-    currentSubsequence = 0;
-    totalSubsequences = 0;
 }
 
+// Mise à jour élément
 function updateElement(index, className) {
     const elem = document.getElementById(`elem${index}`);
     elem.className = `array-element ${className}`;
 }
 
-function showGapIndicator(index, gap) {
-    const gapIndicator = document.getElementById(`elem${index}`).querySelector('.gap-indicator');
-    if (gapIndicator) {
-        gapIndicator.textContent = `gap=${gap}`;
-        gapIndicator.style.display = 'block';
-    }
-}
-
-function hideAllGapIndicators() {
-    document.querySelectorAll('.gap-indicator').forEach(indicator => {
-        indicator.style.display = 'none';
-    });
-}
-
-function highlightGapSequence(start, gap) {
-    // Reset all to default first
-    for (let i = 0; i < arr.length; i++) {
-        updateElement(i, 'default');
-    }
-    
-    // Highlight elements in this gap sequence
-    for (let i = start; i < arr.length; i += gap) {
-        updateElement(i, 'in-gap-sequence');
-    }
-    
-    // Highlight current gap element specially
-    updateElement(start, 'current-gap');
-}
-
-function calculateGapSequence(n) {
-    const gaps = [];
-    let p = 0;
-    
-    // Calcul des gaps selon la séquence de Knuth: 1, 4, 13, 40, 121, ...
-    while (p < n) {
-        p = 3 * p + 1;
-    }
-    
-    while (p > 0) {
-        p = Math.floor(p / 3);
-        if (p > 0) {
-            gaps.push(p);
-        }
-    }
-    
-    return gaps;
-}
-
+// Tri Shell animé
 async function shellSortAnimation() {
     if (isAnimating) return;
-    
     isAnimating = true;
     startBtn.disabled = true;
     generateBtn.disabled = true;
-    startBtn.textContent = 'Animation en cours...';
-
+    
     const n = arr.length;
     let totalComparisons = 0;
     let totalShifts = 0;
     
-    // Calculate gap sequence
-    gapSequence = calculateGapSequence(n);
-    currentGapIndex = 0;
-    totalSubsequences = 0;
-
-    stepsDiv.innerHTML = "<strong>Tableau initial non trié</strong><br>Calcul de la séquence des pas (gaps)...";
-    await sleep(3000);
-
-    for (let gapIdx = 0; gapIdx < gapSequence.length; gapIdx++) {
-        const gap = gapSequence[gapIdx];
+    // Calcul séquence des pas (Knuth)
+    let gap = 1;
+    while (gap < n) gap = gap * 3 + 1;
+    gap = Math.floor(gap / 3);
+    
+    while (gap > 0) {
         currentGap.textContent = gap;
-        currentGapIndex = gapIdx;
+        stepsDiv.textContent = `Pas = ${gap} - Tri par insertion avec ce décalage`;
+        await sleep(2000);
         
-        stepsDiv.innerHTML = `<strong>Pas = ${gap}</strong><br>Début du tri par insertion avec ce pas. Le tableau est divisé en ${gap} sous-séquences.`;
-        await sleep(3000);
-
-        // For each subsequence starting position
-        for (let start = 0; start < gap; start++) {
-            currentSubsequence = start;
-            subsequences.textContent = `${start + 1}/${gap}`;
+        for (let i = gap; i < n; i++) {
+            const temp = arr[i];
+            let j = i;
             
-            // Highlight current gap sequence
-            highlightGapSequence(start, gap);
+            // Affichage comparaison
+            updateElement(i, 'comparing');
+            if (j - gap >= 0) updateElement(j - gap, 'comparing');
+            totalComparisons++;
+            comparisons.textContent = totalComparisons;
+            await sleep(1500);
             
-            stepsDiv.innerHTML = `<strong>Pas = ${gap}</strong> | Sous-séquence ${start + 1}/${gap}<br>Tri par insertion des éléments aux positions: ${Array.from({length: Math.ceil((n-start)/gap)}, (_, i) => start + i*gap).join(', ')}`;
-            await sleep(3000);
-
-            // Insertion sort for this subsequence
-            for (let i = start + gap; i < n; i += gap) {
-                const v = arr[i];
-                let j = i;
+            // Décalage éléments
+            while (j >= gap && arr[j - gap] > temp) {
+                arr[j] = arr[j - gap];
+                document.getElementById(`elem${j}`).textContent = arr[j];
                 
-                // Add arrow to current element
-                const arrow = document.createElement('div');
-                arrow.className = 'arrow';
-                arrow.textContent = '↓';
-                document.getElementById(`elem${i}`).appendChild(arrow);
+                updateElement(j - gap, 'swapping');
+                updateElement(j, 'swapping');
+                totalShifts++;
+                shifts.textContent = totalShifts;
                 
-                updateElement(i, 'comparing');
-                updateElement(j - gap, 'comparing');
+                await sleep(1500);
                 
-                totalComparisons++;
-                comparisons.textContent = totalComparisons;
+                // Réinitialisation couleurs
+                updateElement(j - gap, 'default');
+                updateElement(j, 'default');
                 
-                stepsDiv.innerHTML = `<strong>Pas = ${gap}</strong> | Sous-séquence ${start + 1}/${gap}<br>Comparaison: arr[${j-gap}] (${arr[j-gap]}) > v (${v}) ?`;
-                await sleep(3000);
-
-                // Shift elements
-                while (j >= start + gap && arr[j - gap] > v) {
-                    // Perform shift
-                    arr[j] = arr[j - gap];
-                    document.getElementById(`elem${j}`).textContent = arr[j];
-                    
-                    updateElement(j - gap, 'swapping');
-                    updateElement(j, 'swapping');
-                    
-                    totalShifts++;
-                    shifts.textContent = totalShifts;
-                    
-                    stepsDiv.innerHTML = `<strong>Pas = ${gap}</strong> | Sous-séquence ${start + 1}/${gap}<br>Décalage: arr[${j}] ← arr[${j-gap}] (${arr[j]})<br>j ← ${j} - ${gap} = ${j-gap}`;
-                    await sleep(3000);
-                    
-                    // Reset colors
-                    updateElement(j - gap, 'in-gap-sequence');
-                    updateElement(j, 'in-gap-sequence');
-                    
-                    j -= gap;
-                    
-                    if (j >= start + gap) {
-                        updateElement(j - gap, 'comparing');
-                        updateElement(j, 'comparing');
-                        
-                        totalComparisons++;
-                        comparisons.textContent = totalComparisons;
-                        
-                        stepsDiv.innerHTML = `<strong>Pas = ${gap}</strong> | Sous-séquence ${start + 1}/${gap}<br>Nouvelle comparaison: arr[${j-gap}] (${arr[j-gap]}) > v (${v}) ?`;
-                        await sleep(3000);
-                    }
-                }
-                
-                // Remove arrow
-                if (document.getElementById(`elem${i}`).contains(arrow)) {
-                    document.getElementById(`elem${i}`).removeChild(arrow);
-                }
-                
-                // Insert v at correct position
-                if (j !== i) {
-                    arr[j] = v;
-                    document.getElementById(`elem${j}`).textContent = v;
-                    updateElement(j, 'swapped');
-                    
-                    stepsDiv.innerHTML = `<strong>Pas = ${gap}</strong> | Sous-séquence ${start + 1}/${gap}<br>Insertion: arr[${j}] ← v (${v})`;
-                    await sleep(2000);
-                    
-                    updateElement(j, 'in-gap-sequence');
-                }
-                
-                // Reset all to gap sequence colors
-                highlightGapSequence(start, gap);
+                j -= gap;
             }
             
-            // Mark this subsequence as partially sorted
-            for (let i = start; i < n; i += gap) {
-                if (gapIdx === gapSequence.length - 1) {
-                    updateElement(i, 'sorted');
-                }
+            // Insertion valeur
+            if (j !== i) {
+                arr[j] = temp;
+                document.getElementById(`elem${j}`).textContent = temp;
+                updateElement(j, 'swapping');
+                await sleep(1500);
+            }
+            
+            // Réinitialisation
+            for (let k = 0; k < n; k++) {
+                updateElement(k, k <= i ? 'sorted' : 'default');
             }
         }
         
-        stepsDiv.innerHTML = `<strong>Pas = ${gap} terminé</strong><br>${gap === 1 ? 'Dernier passage avec pas=1 (tri par insertion classique)' : 'Passage au pas suivant...'}`;
-        await sleep(3000);
+        gap = Math.floor(gap / 3);
     }
-
-    // Final pass - mark all as sorted
-    for (let i = 0; i < n; i++) {
-        updateElement(i, 'sorted');
-        await sleep(200);
-    }
-
-    stepsDiv.innerHTML = `<strong>Tri Shell terminé !</strong> Le tableau est complètement trié.<br><br>Résumé : ${gapSequence.length} passes avec différents pas, ${totalComparisons} comparaisons, ${totalShifts} décalages`;
-
+    
+    // Finalisation
+    for (let i = 0; i < n; i++) updateElement(i, 'sorted');
+    stepsDiv.textContent = `Tri terminé! ${totalComparisons} comparaisons, ${totalShifts} décalages`;
+    
     isAnimating = false;
     startBtn.disabled = false;
     generateBtn.disabled = false;
-    startBtn.textContent = 'Démarrer l\'Animation';
 }
 
+// Événements
 generateBtn.onclick = generateRandomArray;
 startBtn.onclick = shellSortAnimation;
 
-// Initialize with simple example
-initializeSimpleExample();
+// Initialisation
+initializeArray();
 </script>
-
 </body>
 </html>
