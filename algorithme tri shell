@@ -1,13 +1,13 @@
 Procédure Tri_Shell (@ T:tab, N:entier)
 Début
 
-p<0
+p<--0
 Tant que (p<N) faire  
-  p< (3*p+1)   Calcul de pas maximal  
+  p<-- (3*p+1)   Calcul de pas maximal  
 Fin tant que
 
 Tant que (p≠0) faire  
-  p<p div 3  
+  p<--p div 3  
   Pour i de p à N-1 faire  
        v←T[i]                                                                                     
        j←i
